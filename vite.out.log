@@ -1,0 +1,51 @@
+
+> laundry-management-system@0.0.0 dev
+> vite --host 127.0.0.1
+
+
+  [32m[1mVITE[22m v8.2.0[39m  [2mready in [0m[1m1943[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5173[22m/[39m
+[2m9:32:27 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/context/AppContext.jsx, /src/index.css[22m
+[2m9:32:27 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [33mhmr invalidate [39m[2m/src/context/AppContext.jsx[22m Could not Fast Refresh ("useApp" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m9:32:27 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/pages/LoginPage.jsx, /src/pages/RegistrationPage.jsx, /src/layouts/MainLayout.jsx, /src/pages/admin/AdminDashboard.jsx, /src/pages/customer/CustomerDashboard.jsx, /src/pages/staff/StaffDashboard.jsx, /src/pages/HomePage.jsx, /src/routes/RoleGuard.jsx[22m
+[2m9:33:25 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/staff/StaffDashboard.jsx, /src/index.css[22m
+[2m9:35:40 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/admin/AdminDashboard.jsx, /src/index.css[22m
+[2m9:49:51 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/staff/StaffDashboard.jsx, /src/index.css[22m
+[2m9:50:40 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/context/AppContext.jsx, /src/index.css[22m
+[2m9:50:41 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [33mhmr invalidate [39m[2m/src/context/AppContext.jsx[22m Could not Fast Refresh ("useApp" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m9:50:41 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/pages/LoginPage.jsx, /src/pages/RegistrationPage.jsx, /src/layouts/MainLayout.jsx, /src/pages/admin/AdminDashboard.jsx, /src/pages/customer/CustomerDashboard.jsx, /src/pages/staff/StaffDashboard.jsx, /src/pages/HomePage.jsx, /src/routes/RoleGuard.jsx[22m
+[2m9:50:59 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/staff/StaffDashboard.jsx, /src/index.css[22m
+[2m9:51:56 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/context/AppContext.jsx, /src/index.css[22m
+[2m9:51:56 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [33mhmr invalidate [39m[2m/src/context/AppContext.jsx[22m Could not Fast Refresh ("useApp" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m9:51:56 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/pages/LoginPage.jsx, /src/pages/RegistrationPage.jsx, /src/layouts/MainLayout.jsx, /src/pages/admin/AdminDashboard.jsx, /src/pages/customer/CustomerDashboard.jsx, /src/pages/staff/StaffDashboard.jsx, /src/pages/HomePage.jsx, /src/routes/RoleGuard.jsx[22m
+[2m9:52:31 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/context/AppContext.jsx, /src/index.css[22m
+[2m9:52:32 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [33mhmr invalidate [39m[2m/src/context/AppContext.jsx[22m Could not Fast Refresh ("useApp" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m9:52:32 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/pages/LoginPage.jsx, /src/pages/RegistrationPage.jsx, /src/layouts/MainLayout.jsx, /src/pages/admin/AdminDashboard.jsx, /src/pages/customer/CustomerDashboard.jsx, /src/pages/staff/StaffDashboard.jsx, /src/pages/HomePage.jsx, /src/routes/RoleGuard.jsx[22m
+[2m10:00:10 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/staff/StaffDashboard.jsx, /src/index.css[22m
+[2m10:20:49 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/context/AppContext.jsx, /src/index.css[22m
+[2m10:20:49 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [33mhmr invalidate [39m[2m/src/context/AppContext.jsx[22m Could not Fast Refresh ("useApp" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m10:20:49 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/pages/LoginPage.jsx, /src/pages/RegistrationPage.jsx, /src/layouts/MainLayout.jsx, /src/pages/admin/AdminDashboard.jsx, /src/pages/customer/CustomerDashboard.jsx, /src/pages/staff/StaffDashboard.jsx, /src/pages/HomePage.jsx, /src/routes/RoleGuard.jsx[22m
+[2m10:21:36 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/admin/AdminDashboard.jsx, /src/index.css[22m
+[2m11:41:13 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/customer/CustomerDashboard.jsx, /src/index.css[22m
+[2m11:42:06 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/customer/CustomerDashboard.jsx, /src/index.css[22m
+[2m11:45:39 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/customer/CustomerDashboard.jsx, /src/index.css[22m
+[2m11:48:47 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/customer/CustomerDashboard.jsx, /src/index.css[22m
+[2m11:58:16 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mfrontend/dist/index.html[22m
+[2m11:58:16 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:58:16 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:58:16 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mfrontend/index.html[22m
+[2m11:58:16 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:58:16 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mindex.html[22m
+[2m11:58:16 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:58:16 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:58:16 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:58:16 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m11:58:16 AM[22m [36m[1m[vite][22m[39m [32mvite.config.js changed, restarting server...[39m
+[2m11:58:16 AM[22m [36m[1m[vite][22m[39m server restarted.
+[2m11:58:17 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [optimizer] scanning dependencies...
+[2m11:58:51 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2msrc/index.css[22m
+[2m11:59:33 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2msrc/index.css[22m
+[2m12:04:01 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mfrontend/dist/index.html[22m
+[2m12:04:01 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mfrontend/dist/index.html[22m
+[2m1:18:35 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mfrontend/index.html[22m

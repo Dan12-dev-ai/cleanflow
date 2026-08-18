@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Services\Payments;
+
+use App\Models\Payment;
+use RuntimeException;
+
+class TelebirrPaymentService implements PaymentGateway
+{
+    public function create(Payment $payment): array
+    {
+        if (! config('services.telebirr.merchant_id') || ! config('services.telebirr.checkout_url')) {
+            throw new RuntimeException('Telebirr is not configured. Add authorized merchant credentials before accepting payments.');
+        }
+
+        // Implement the authorized merchant API request here. Never expose its keys to React.
+        throw new RuntimeException('Telebirr checkout creation must be completed with the authorized merchant API specification.');
+    }
+
+    public function verify(Payment $payment, ?string $providerTransactionId = null): array
+    {
+        // Implement server-to-server verification using Telebirr's official merchant API.
+        throw new RuntimeException('Telebirr verification is not configured.');
+    }
+}
