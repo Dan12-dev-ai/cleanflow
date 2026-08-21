@@ -14,8 +14,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\FeedbackController;
 
 Route::get('/', fn () => response()->json([
     'name' => 'CleanFlow Laundry OS API',
@@ -29,6 +29,8 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/forgot-password', [PasswordResetController::class, 'sendLink']);
 Route::post('/auth/reset-password', [PasswordResetController::class, 'reset']);
 Route::get('/services', [ServiceController::class, 'index']);
+Route::get('/feedback', [FeedbackController::class, 'publicIndex']);
+Route::post('/feedback', [FeedbackController::class, 'store'])->middleware('throttle:10,1');
 Route::post('/payments/webhook', [PaymentController::class, 'webhook'])->middleware('throttle:60,1');
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
@@ -69,7 +71,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reports', [ReportController::class, 'index'])->middleware('role:admin');
     Route::get('/settings', [SettingController::class, 'index'])->middleware('role:admin');
     Route::put('/settings', [SettingController::class, 'update'])->middleware('role:admin');
-    Route::get('/invoices', [InvoiceController::class, 'index']);
-    Route::get('/invoices/{invoice}', [InvoiceController::class, 'show']);
-    Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'download']);
+    Route::get('/admin/feedback', [FeedbackController::class, 'index'])->middleware('role:admin');
+    Route::patch('/admin/feedback/{feedback}', [FeedbackController::class, 'update'])->middleware('role:admin');
 });

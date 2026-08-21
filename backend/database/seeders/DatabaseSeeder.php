@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::firstOrCreate(['email'=>'admin@cleanflow.test'], ['name'=>'CleanFlow Admin','password'=>Hash::make('Admin@12345'),'role'=>'admin','status'=>'active','phone'=>'+251911000001']);
-        $staff = User::firstOrCreate(['email'=>'staff@cleanflow.test'], ['name'=>'Grace Boateng','password'=>Hash::make('Staff@12345'),'role'=>'staff','status'=>'active','phone'=>'+251911000002']);
+        $admin = User::firstOrCreate(['email'=>'admin@cleanflow.com'], ['name'=>'CleanFlow Admin','password'=>Hash::make('Admin@12345'),'role'=>'admin','status'=>'active','phone'=>'+251911000001']);
+        $staff = User::firstOrCreate(['email'=>'staff@cleanflow.com'], ['name'=>'Grace Boateng','password'=>Hash::make('Staff@12345'),'role'=>'staff','status'=>'active','phone'=>'+251911000002']);
         $staff->staffProfile()->firstOrCreate([], ['phone'=>$staff->phone,'position'=>'Laundry Specialist','status'=>'active']);
         $customer = User::firstOrCreate(['email'=>'customer@cleanflow.test'], ['name'=>'Maya Chen','password'=>Hash::make('Customer@12345'),'role'=>'customer','status'=>'active','phone'=>'+251911000003','address'=>'Addis Ababa']);
         $customer->customerProfile()->firstOrCreate([], ['phone'=>$customer->phone,'address'=>$customer->address]);

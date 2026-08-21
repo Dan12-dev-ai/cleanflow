@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FiActivity, FiCheckCircle, FiChevronDown, FiClock, FiCloud, FiCreditCard, FiDownload, FiEdit3, FiEye, FiFileText, FiFilter, FiPlus, FiSearch, FiSettings, FiShield, FiTrash2, FiTrendingUp, FiUsers, FiX } from 'react-icons/fi'
 import { reportsData } from '../../data/mockData'
 import { useApp } from '../../context/AppContext'
-import { api } from '../../lib/api'
+import { api, apiData } from '../../lib/api'
 
 const statuses = ['Pending', 'Received', 'Washing', 'Drying', 'Ironing', 'Ready', 'Ready for Pickup', 'Delivered']
 const paymentStatuses = ['All', 'Paid', 'Partial', 'Pending']
@@ -26,7 +26,7 @@ function AdminStat({ icon: Icon, title, value, hint, tone = 'blue' }) {
   return <article className={`admin-stat-card ${tone}`}><span className="admin-stat-icon"><Icon /></span><div><small>{title}</small><strong>{value}</strong><p>{hint}</p></div></article>
 }
 
-function AdminTable({ title, rows, columns, searchFields, filterKey, filterOptions = [], filterLabel = 'All', toolbarAction, rowActions, emptyText = 'No records found.' }) {
+function AdminTable({ title, rows, columns, searchFields, filterKey, filterOptions = [], filterLabel = 'All', toolbarAction, toolbarExtra, rowActions, emptyText = 'No records found.' }) {
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState('All')
   const filteredRows = useMemo(() => rows.filter((row) => {
@@ -37,7 +37,7 @@ function AdminTable({ title, rows, columns, searchFields, filterKey, filterOptio
 
   return <section className="dashboard-panel admin-table-panel">
     <div className="panel-heading"><div><p className="admin-panel-kicker">LIVE DATA</p><h3>{title}</h3></div>{toolbarAction}</div>
-    <div className="admin-table-toolbar"><label><FiSearch /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`Search ${title.toLowerCase()}...`} /></label>{filterOptions.length > 0 && <label className="admin-filter"><FiFilter /><select value={filter} onChange={(event) => setFilter(event.target.value)} aria-label={filterLabel}>{filterOptions.map((option) => <option key={option}>{option}</option>)}</select><FiChevronDown /></label>}<span>{filteredRows.length} of {rows.length}</span></div>
+    <div className="admin-table-toolbar"><label><FiSearch /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`Search ${title.toLowerCase()}...`} /></label>{filterOptions.length > 0 && <label className="admin-filter"><FiFilter /><select value={filter} onChange={(event) => setFilter(event.target.value)} aria-label={filterLabel}>{filterOptions.map((option) => <option key={option}>{option}</option>)}</select><FiChevronDown /></label>}{toolbarExtra}<span>{filteredRows.length} of {rows.length}</span></div>
     <div className="admin-table-wrap"><table className="admin-table"><thead><tr>{columns.map((column) => <th key={column.key}>{column.label}</th>)}{rowActions && <th>Actions</th>}</tr></thead><tbody>{filteredRows.map((row) => <tr key={row.id}>{columns.map((column) => <td key={column.key}>{column.render ? column.render(row) : row[column.key]}</td>)}{rowActions && <td><div className="admin-row-actions">{rowActions(row)}</div></td>}</tr>)}</tbody></table>{filteredRows.length === 0 && <p className="admin-empty-state">{emptyText}</p>}</div>
   </section>
 }
@@ -62,8 +62,10 @@ function StaffManagement({ app, toast }) {
 
 function Customers({ app, toast }) {
   const [draft, setDraft] = useState(null)
+  const [minimumOrders, setMinimumOrders] = useState(0)
   const save = (value) => { app.setAdminCustomers((current) => [...current, { ...value, id: Date.now(), orders: 0, score: 0 }]); app.logActivity(`Added customer ${value.name}`); toast('Customer added successfully.', 'success'); setDraft(null) }
-  return <div className="dashboard-stack"><AdminHero label="CUSTOMER MANAGEMENT" title="Customers" text="Search customer profiles, contact details, and account status." /><AdminTable title="Customer directory" rows={app.adminCustomers} searchFields={['name', 'phone', 'email', 'address']} filterKey="status" filterOptions={['All', 'VIP', 'Regular', 'New', 'Active']} columns={[{ key: 'name', label: 'Customer' }, { key: 'phone', label: 'Phone' }, { key: 'email', label: 'Email' }, { key: 'address', label: 'Address' }, { key: 'status', label: 'Status', render: (row) => <span className={statusClass(row.status)}>{row.status}</span> }]} toolbarAction={<button className="solid-action" onClick={() => setDraft({ name: '', phone: '', email: '', address: '', status: 'Active' })}><FiPlus /> Add customer</button>} rowActions={(row) => <button onClick={() => toast(`${row.name}'s profile opened.`, 'success')} aria-label="View customer"><FiEye /></button>} />{draft && <RecordModal title="Add customer" initial={draft} fields={[{ key: 'name', label: 'Full name' }, { key: 'phone', label: 'Phone' }, { key: 'email', label: 'Email', type: 'email' }, { key: 'address', label: 'Address' }, { key: 'status', label: 'Status' }]} onClose={() => setDraft(null)} onSave={save} />}</div>
+  const visibleCustomers = app.adminCustomers.filter((customer) => Number(customer.orders_count ?? customer.orders ?? 0) >= minimumOrders)
+  return <div className="dashboard-stack"><AdminHero label="CUSTOMER MANAGEMENT" title="Customers" text="Search customer profiles, contact details, and account status." /><AdminTable title="Customer directory" rows={visibleCustomers} searchFields={['name', 'phone', 'email', 'address']} filterKey="status" filterOptions={['All', 'active', 'inactive']} toolbarExtra={<label className="admin-filter">Orders at least <input type="number" min="0" value={minimumOrders} onChange={(event) => setMinimumOrders(Math.max(0, Number(event.target.value)))} /></label>} columns={[{ key: 'name', label: 'Customer' }, { key: 'phone', label: 'Phone' }, { key: 'email', label: 'Email' }, { key: 'address', label: 'Address' }, { key: 'orders_count', label: 'Orders', render: (row) => row.orders_count ?? row.orders ?? 0 }, { key: 'status', label: 'Status', render: (row) => <span className={statusClass(row.status)}>{row.status}</span> }]} toolbarAction={<button className="solid-action" onClick={() => setDraft({ name: '', phone: '', email: '', address: '', status: 'active' })}><FiPlus /> Add customer</button>} rowActions={(row) => <button onClick={() => toast(`${row.name}'s profile opened.`, 'success')} aria-label="View customer"><FiEye /></button>} />{draft && <RecordModal title="Add customer" initial={draft} fields={[{ key: 'name', label: 'Full name' }, { key: 'phone', label: 'Phone' }, { key: 'email', label: 'Email', type: 'email' }, { key: 'address', label: 'Address' }, { key: 'status', label: 'Status' }]} onClose={() => setDraft(null)} onSave={save} />}</div>
 }
 
 function Orders({ app, toast }) {
@@ -81,6 +83,14 @@ function Services({ app, toast }) {
 function Payments({ app, toast }) {
   const rows = app.adminPayments.map((payment) => ({ ...payment, status: payment.paid >= payment.total ? 'Paid' : payment.paid > 0 ? 'Partial' : 'Pending', balance: payment.total - payment.paid }))
   return <div className="dashboard-stack"><AdminHero label="FINANCE CENTER" title="Payments & Invoices" text="Track collected payments, outstanding balances, and invoice history." /><AdminTable title="Payment history" rows={rows} searchFields={['orderId', 'customer', 'method', 'status']} filterKey="status" filterOptions={paymentStatuses} columns={[{ key: 'orderId', label: 'Order ID' }, { key: 'customer', label: 'Customer' }, { key: 'total', label: 'Total', render: (row) => `${row.total} Birr` }, { key: 'paid', label: 'Paid', render: (row) => `${row.paid} Birr` }, { key: 'balance', label: 'Balance', render: (row) => `${row.balance} Birr` }, { key: 'status', label: 'Status', render: (row) => <span className={statusClass(row.status)}>{row.status}</span> }]} rowActions={(row) => <button onClick={() => { download(`invoice-${row.orderId}.pdf`, `CleanFlow Invoice\nOrder: ${row.orderId}\nCustomer: ${row.customer}\nTotal: ${row.total}\nPaid: ${row.paid}\nBalance: ${row.balance}`); toast('Invoice downloaded.', 'success') }} aria-label="Download invoice"><FiDownload /></button>} /></div>
+}
+
+function Feedback({ toast }) {
+  const [rows, setRows] = useState([])
+  const load = async () => { try { setRows(await apiData('/admin/feedback')) } catch (error) { toast(error.message, 'error') } }
+  useEffect(() => { load() }, [])
+  const setStatus = async (row, status) => { try { await api(`/admin/feedback/${row.id}`, { method: 'PATCH', body: JSON.stringify({ status }) }); await load(); toast(`Feedback ${status}.`, 'success') } catch (error) { toast(error.message, 'error') } }
+  return <div className="dashboard-stack"><AdminHero label="CUSTOMER VOICE" title="Customer feedback" text="Review customer comments before publishing them on the public homepage." /><AdminTable title="Feedback submissions" rows={rows} searchFields={['name', 'message', 'status']} filterKey="status" filterOptions={['All', 'pending', 'approved', 'rejected']} columns={[{ key: 'name', label: 'Customer' }, { key: 'rating', label: 'Rating', render: (row) => '★'.repeat(row.rating) }, { key: 'message', label: 'Comment' }, { key: 'status', label: 'Status', render: (row) => <span className={statusClass(row.status)}>{row.status}</span> }]} rowActions={(row) => <><button onClick={() => setStatus(row, 'approved')}>Approve</button><button onClick={() => setStatus(row, 'rejected')}>Reject</button></>} /></div>
 }
 
 function Reports({ toast }) {
@@ -119,6 +129,7 @@ export default function AdminDashboard() {
   if (section === 'orders') return <Orders app={app} toast={toast} />
   if (section === 'services') return <Services app={app} toast={toast} />
   if (section === 'payments') return <Payments app={app} toast={toast} />
+  if (section === 'feedback') return <Feedback toast={toast} />
   if (section === 'reports') return <Reports toast={toast} />
   if (section === 'inventory') return <Inventory app={app} toast={toast} />
   if (section === 'notifications') return <Notifications app={app} toast={toast} />

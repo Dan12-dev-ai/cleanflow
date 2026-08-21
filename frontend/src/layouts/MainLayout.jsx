@@ -5,9 +5,9 @@ import { api } from '../lib/api'
 import logoMark from '../assets/images/cleanflow-logo-mark.png'
 
 const menu = {
-  Admin: [['dashboard', 'Dashboard', FiGrid], ['customers', 'Customer management', FiUser], ['staff', 'Staff management', FiUsers], ['orders', 'Order management', FiShoppingBag], ['services', 'Services & pricing', FiBox], ['payments', 'Payments & finance', FiCreditCard], ['reports', 'Reports & analytics', FiClipboard], ['inventory', 'Inventory', FiTruck], ['notifications', 'Notifications', FiBell], ['settings', 'Settings & profile', FiSettings]],
+  Admin: [['dashboard', 'Dashboard', FiGrid], ['customers', 'Customer management', FiUser], ['staff', 'Staff management', FiUsers], ['orders', 'Order management', FiShoppingBag], ['services', 'Services & pricing', FiBox], ['payments', 'Payments & finance', FiCreditCard], ['feedback', 'Customer feedback', FiClipboard], ['reports', 'Reports & analytics', FiClipboard], ['inventory', 'Inventory', FiTruck], ['notifications', 'Notifications', FiBell], ['settings', 'Settings & profile', FiSettings]],
   Staff: [['dashboard', 'Dashboard', FiGrid], ['orders', 'Assigned orders', FiShoppingBag], ['tasks', 'Assigned tasks', FiClipboard], ['customers', 'Customer details', FiUser], ['deliveries', 'Pickup & delivery', FiTruck], ['notifications', 'Notifications', FiBell], ['profile', 'My profile', FiUser]],
-  Customer: [['dashboard', 'Dashboard', FiGrid], ['booking', 'Create new order', FiShoppingBag], ['orders', 'My orders', FiClipboard], ['services', 'Services & prices', FiCreditCard], ['payments', 'Payment & invoice', FiCreditCard], ['delivery', 'Pickup & delivery', FiTruck], ['notifications', 'Notifications', FiBell], ['profile', 'My profile', FiUser]],
+  Customer: [['dashboard', 'Dashboard', FiGrid], ['booking', 'Create new order', FiShoppingBag], ['orders', 'My orders', FiClipboard], ['services', 'Services & prices', FiCreditCard], ['payments', 'Payment & invoice', FiCreditCard], ['delivery', 'Pickup & delivery', FiTruck], ['feedback', 'Feedback', FiBell], ['notifications', 'Notifications', FiBell], ['profile', 'My profile', FiUser]],
 }
 
 export default function MainLayout() {

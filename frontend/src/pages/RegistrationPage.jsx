@@ -84,13 +84,12 @@ export default function RegistrationPage() {
     const { nextErrors, email, phone, fullName } = validate()
     if (Object.keys(nextErrors).length) return
 
-    try { await api('/auth/register', { method: 'POST', body: JSON.stringify({ name: fullName, email, phone, address: form.address.trim(), password: form.password, password_confirmation: form.confirmPassword }) }); setCustomerProfile({ name: fullName, phone, address: form.address.trim(), email, password: '' }); setRegistered(true); showToast('Account created successfully'); window.setTimeout(() => navigate('/login'), 1800) } catch (error) { showToast(error.message, 'error') }
+    try { await api('/auth/register', { method: 'POST', body: JSON.stringify({ name: fullName, email, phone, address: form.address.trim(), password: form.password, password_confirmation: form.confirmPassword }) }); setCustomerProfile({ name: fullName, phone, address: form.address.trim(), email, password: '' }); setRegistered(true); showToast('You have registered successfully.') } catch (error) { showToast(error.message, 'error') }
   }
 
   const reset = () => {
     setForm(initialForm)
     setErrors({})
-    setRegistered(false)
   }
 
   const fieldClass = (field) => `register-input-wrap ${errors[field] ? 'has-error' : ''}`
@@ -102,9 +101,10 @@ export default function RegistrationPage() {
         <div className="register-success-card">
           <div className="register-success-icon"><FiCheck /></div>
           <p className="blue-kicker">WELCOME TO CLEANFLOW</p>
-          <h1>Account created successfully</h1>
+          <h1>You have registered successfully</h1>
           <p>Your customer account is ready. We’ll take you to the login page so you can start your first laundry order.</p>
           <Link className="login-submit" to="/login">Continue to Login <FiArrowRight /></Link>
+          <button type="button" className="register-google-button" onClick={() => navigate('/login')}><b>G</b> Continue with Google</button>
         </div>
       </div>
     )

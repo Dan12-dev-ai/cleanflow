@@ -50,12 +50,8 @@ class User extends Authenticatable
     }
 
     public function customerProfile() { return $this->hasOne(CustomerProfile::class); }
-    public function customer() { return $this->hasOne(Customer::class); }
     public function staffProfile() { return $this->hasOne(StaffProfile::class); }
     public function orders() { return $this->hasMany(Order::class, 'customer_id'); }
     public function assignedOrders() { return $this->hasMany(Order::class, 'assigned_staff_id'); }
-    public function roleRecord() { return $this->belongsTo(Role::class, 'role_id', 'role_id'); }
-    public function employee() { return $this->hasOne(Employee::class); }
-    public function administrator() { return $this->hasOne(Administrator::class); }
     public function hasRole(string ...$roles): bool { return in_array($this->role, $roles, true); }
 }

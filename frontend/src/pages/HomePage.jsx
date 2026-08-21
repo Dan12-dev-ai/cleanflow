@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FiArrowRight, FiCheck, FiClock, FiMail, FiMapPin, FiMessageCircle, FiPhone, FiShield, FiTruck, FiZap } from 'react-icons/fi'
 import { useApp } from '../context/AppContext'
+import { apiData, api } from '../lib/api'
 import heroPhoto from '../assets/images/laundry-hero.jpg'
 import logoMark from '../assets/images/cleanflow-logo-mark.png'
 import deliveryPhoto from '../assets/images/photo_2026-08-15_13-18-03.jpg'
@@ -37,6 +38,7 @@ const values = [
 export default function HomePage() {
   const [feedback, setFeedback] = useState({ name: '', rating: '5', message: '' })
   const [feedbackSent, setFeedbackSent] = useState(false)
+  const [reviews, setReviews] = useState([])
   const { showToast } = useApp()
 
   const scrollTo = (id) => (event) => {
@@ -45,15 +47,15 @@ export default function HomePage() {
     window.history.replaceState(null, '', id)
   }
 
-  const submitFeedback = (event) => {
+  useEffect(() => { apiData('/feedback').then(setReviews).catch(() => setReviews([])) }, [])
+
+  const submitFeedback = async (event) => {
     event.preventDefault()
     if (!feedback.name.trim() || !feedback.message.trim()) {
       showToast('Please add your name and feedback.', 'error')
       return
     }
-    setFeedbackSent(true)
-    setFeedback({ name: '', rating: '5', message: '' })
-    showToast('Thank you for your feedback.')
+    try { const saved = await api('/feedback', { method: 'POST', body: JSON.stringify({ ...feedback, rating: Number(feedback.rating) }) }); setReviews((current) => [saved, ...current]); setFeedbackSent(true); setFeedback({ name: '', rating: '5', message: '' }); showToast('Thank you. Your feedback is now visible.') } catch (error) { showToast(error.message, 'error') }
   }
 
   const submitContact = (event) => {
@@ -83,7 +85,7 @@ export default function HomePage() {
 
       <section id="how-it-works" className="how-section workflow-section"><div><p className="blue-kicker">HOW IT WORKS</p><h2>Laundry Made Simple</h2><p className="how-intro">Getting your clothes professionally cleaned has never been easier.</p><div className="workflow-grid">{workflow.map(([number, title, text]) => <article key={number}><b>{number}</b><div><h3>{title}</h3><p>{text}</p></div></article>)}</div></div><div className="workflow-art"><div className="hero-machine"><span /><i /><b /></div><div className="hero-towel-stack"><i /><i /><i /></div></div></section>
 
-      <section id="feedback" className="marketing-section feedback-section"><p className="blue-kicker">CUSTOMER FEEDBACK</p><h2>What Our Customers Say</h2><p>Your feedback helps us keep improving our service.</p><div className="feedback-layout"><form className="feedback-form" onSubmit={submitFeedback}><h3>Share Your Feedback</h3><label>Your Name<input value={feedback.name} onChange={(event) => setFeedback({ ...feedback, name: event.target.value })} placeholder="Enter your name" /></label><label>Rating<select value={feedback.rating} onChange={(event) => setFeedback({ ...feedback, rating: event.target.value })}><option value="5">★★★★★ Excellent</option><option value="4">★★★★ Very good</option><option value="3">★★★ Good</option><option value="2">★★ Needs improvement</option><option value="1">★ Poor</option></select></label><label>Your Feedback<textarea rows="4" value={feedback.message} onChange={(event) => setFeedback({ ...feedback, message: event.target.value })} placeholder="Tell us about your experience" /></label><button className="primary-action" type="submit">Send Feedback <FiMessageCircle /></button>{feedbackSent && <p className="feedback-success">Thank you — your feedback has been received.</p>}</form><div className="feedback-quotes"><article><span>★★★★★</span><p>“My clothes always come back fresh, neatly folded, and on time.”</p><strong>Sarah M.</strong><small>Happy customer</small></article><article><span>★★★★★</span><p>“The pickup and delivery service saves me so much time every week.”</p><strong>David T.</strong><small>Regular customer</small></article></div></div></section>
+      <section id="feedback" className="marketing-section feedback-section"><p className="blue-kicker">CUSTOMER FEEDBACK</p><h2>What Our Customers Say</h2><p>Your feedback helps us keep improving our service.</p><div className="feedback-layout"><form className="feedback-form" onSubmit={submitFeedback}><h3>Share Your Feedback</h3><label>Your Name<input required value={feedback.name} onChange={(event) => setFeedback({ ...feedback, name: event.target.value })} placeholder="Enter your name" /></label><label>Rating<select value={feedback.rating} onChange={(event) => setFeedback({ ...feedback, rating: event.target.value })}><option value="5">★★★★★ Excellent</option><option value="4">★★★★ Very good</option><option value="3">★★★ Good</option><option value="2">★★ Needs improvement</option><option value="1">★ Poor</option></select></label><label>Your Feedback<textarea required rows="4" value={feedback.message} onChange={(event) => setFeedback({ ...feedback, message: event.target.value })} placeholder="Tell us about your experience" /></label><button className="primary-action" type="submit">Send Feedback <FiMessageCircle /></button>{feedbackSent && <p className="feedback-success">Thank you — your feedback has been received.</p>}</form><div className="feedback-quotes">{reviews.length ? reviews.map((review) => <article key={review.id}><span>{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span><p>“{review.message}”</p><strong>{review.name}</strong><small>Verified customer feedback</small></article>) : <article><span>★★★★★</span><p>“Be the first customer to share your experience.”</p><strong>CleanFlow</strong><small>Feedback is published after approval</small></article>}</div></div></section>
 
       <section id="contact" className="contact-section"><div className="contact-intro"><p className="blue-kicker">CONTACT US</p><h2>We’re Here to Help</h2><p>Have a question, need assistance with an order, or want to learn more about our services? Our team is ready to help.</p><div className="contact-details"><div><FiMapPin /><p><strong>Visit Us</strong><span>Come to our laundry center and speak with our team.</span></p></div><div><FiPhone /><p><strong>Call Us</strong><span>We're available to answer your questions and assist with your orders.</span></p></div><div><FiMail /><p><strong>Email Us</strong><span>Send us your questions or feedback and we'll get back to you.</span></p></div></div></div><form className="contact-form" onSubmit={submitContact}><h3>Let's Talk</h3><label>Full Name<input required placeholder="Enter your full name" /></label><label>Email Address<input required type="email" placeholder="you@example.com" /></label><label>Phone Number<input type="tel" placeholder="Your phone number" /></label><label>Subject<input required placeholder="How can we help?" /></label><label>Message<textarea required rows="4" placeholder="Write your message" /></label><button className="primary-action" type="submit">Send Message <FiArrowRight /></button></form></section>
 
