@@ -8,12 +8,14 @@ import StaffDashboard from './pages/staff/StaffDashboard'
 import CustomerDashboard from './pages/customer/CustomerDashboard'
 import RoleGuard from './routes/RoleGuard'
 import HomePage from './pages/HomePage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 
 function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/register" element={<RegistrationPage />} />
       <Route element={<RoleGuard allowedRole="Admin" />}>
         <Route element={<MainLayout />}><Route path="/admin/:section" element={<AdminDashboard />} /></Route>

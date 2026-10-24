@@ -11,9 +11,11 @@ const menu = {
 }
 
 export default function MainLayout() {
-  const { user, setUser } = useApp()
+  const { user, setUser, customerNotifications, staffNotifications, adminNotifications } = useApp()
   const navigate = useNavigate()
   const role = user?.role || 'Customer'
+  const notifications = role === 'Customer' ? customerNotifications : role === 'Staff' ? staffNotifications : adminNotifications
+  const unreadNotifications = notifications.filter((notification) => !notification.read && !notification.read_at).length
   const initials = user?.name?.split(' ').map((name) => name[0]).join('').slice(0, 2)
   const logout = async () => { try { await api('/auth/logout', { method: 'POST' }) } catch {} localStorage.removeItem('cleanflow_token'); setUser(null); navigate('/login') }
   return (
@@ -26,7 +28,7 @@ export default function MainLayout() {
         <button className="sidebar-logout" onClick={logout}><FiLogOut /> Logout</button>
       </aside>
       <section className="role-content">
-        <header className="role-header"><div><p>{role} portal</p><h1>{role} Dashboard</h1></div><label className="workspace-search"><FiSearch /><input placeholder="Search orders, customers, tasks..." /></label><div className="header-profile"><button aria-label="Notifications"><FiBell /><i /></button><span>{initials}</span><div><strong>{user?.name}</strong><small>{role === 'Admin' ? 'Administrator' : `${role} Member`}</small></div></div></header>
+        <header className="role-header"><div><p>{role} portal</p><h1>{role} Dashboard</h1></div><label className="workspace-search"><FiSearch /><input placeholder="Search orders, customers, tasks..." /></label><div className="header-profile"><button aria-label="Notifications" onClick={() => navigate(`/${role.toLowerCase()}/notifications`)}><FiBell />{unreadNotifications > 0 && <i>{unreadNotifications}</i>}</button><span>{initials}</span><div><strong>{user?.name}</strong><small>{role === 'Admin' ? 'Administrator' : `${role} Member`}</small></div></div></header>
         <main><Outlet /></main>
       </section>
     </div>

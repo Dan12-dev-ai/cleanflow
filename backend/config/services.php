@@ -40,6 +40,12 @@ return [
         'checkout_url' => env('TELEBIRR_CHECKOUT_URL'),
         'verify_url' => env('TELEBIRR_VERIFY_URL'),
         'callback_secret' => env('TELEBIRR_CALLBACK_SECRET'),
+        'account_name' => env('TELEBIRR_ACCOUNT_NAME', 'CleanFlow Laundry'),
+        'account_number' => env('TELEBIRR_ACCOUNT_NUMBER', 'Not configured'),
+    ],
+    'cbe' => [
+        'account_name' => env('CBE_ACCOUNT_NAME', 'CleanFlow Laundry'),
+        'account_number' => env('CBE_ACCOUNT_NUMBER', 'Not configured'),
     ],
 
 ];

@@ -9,11 +9,11 @@ class BankPaymentService implements PaymentGateway
 {
     public function create(Payment $payment): array
     {
-        throw new RuntimeException('Bank gateway is not configured.');
+        return ['status' => 'awaiting_proof', 'instructions' => 'Transfer the exact amount, then upload your confirmation screenshot and transaction reference.', 'account_name' => config('services.cbe.account_name', 'CleanFlow Laundry'), 'account_number' => config('services.cbe.account_number', '1000123456789'), 'bank' => 'Commercial Bank of Ethiopia (CBE)'];
     }
 
     public function verify(Payment $payment, ?string $providerTransactionId = null): array
     {
-        throw new RuntimeException('Bank gateway verification is not configured.');
+        return ['status' => 'pending', 'failure_reason' => 'Payment proof is awaiting admin verification.'];
     }
 }

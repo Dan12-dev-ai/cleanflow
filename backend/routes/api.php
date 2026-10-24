@@ -44,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/orders/{order}', [OrderController::class, 'show']);
     Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus']);
     Route::apiResource('customers', CustomerController::class)->middleware('role:admin,staff');
+    Route::patch('/customers/{customer}/password', [CustomerController::class, 'resetPassword'])->middleware('role:admin');
     Route::get('/staff/dashboard', [StaffController::class, 'dashboard'])->middleware('role:staff');
     Route::get('/staff/orders', [StaffController::class, 'orders'])->middleware('role:staff');
     Route::get('/staff/customers', [StaffController::class, 'customers'])->middleware('role:staff');
@@ -56,6 +57,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('deliveries', DeliveryController::class)->middleware('role:admin,staff,customer');
     Route::post('/payments/create', [PaymentController::class, 'create'])->middleware('role:admin,staff,customer');
     Route::post('/payments/{payment}/verify', [PaymentController::class, 'verify'])->middleware('role:admin,staff,customer');
+    Route::post('/payments/{payment}/proof', [PaymentController::class, 'submitProof'])->middleware('role:customer');
+    Route::patch('/payments/{payment}/verification', [PaymentController::class, 'verifyProof'])->middleware('role:admin');
     Route::post('/payments/{payment}/confirm-cash', [PaymentController::class, 'confirmCash'])->middleware('role:admin,staff');
     Route::get('/orders/{order}/payments', [PaymentController::class, 'orderPayments']);
     Route::get('/payments', [PaymentController::class, 'index'])->middleware('role:admin,staff,customer');

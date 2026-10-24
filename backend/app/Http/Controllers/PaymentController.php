@@ -17,7 +17,27 @@ class PaymentController extends Controller
 {
     public function __construct(private readonly PaymentService $payments) {}
 
-    public function index(Request $request) { $query = Payment::with(['order', 'customer']); if ($request->user()->role === 'customer') $query->where('customer_id', $request->user()->id); return $query->latest()->paginate(); }
+    public function index(Request $request) { $query = Payment::with(['order', 'customer']); if ($request->user()->role === 'customer') $query->where('customer_id', $request->user()->id); return $query->latest()->paginate(15); }
+
+    public function submitProof(Request $request, Payment $payment)
+    {
+        abort_unless($payment->customer_id === $request->user()->id, 403);
+        abort_if($payment->payment_method === 'cash', 422, 'Cash payments are confirmed by staff.');
+        $data = $request->validate(['transaction_reference' => 'required|string|max:255|unique:payments,transaction_reference,'.$payment->id, 'screenshot' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120']);
+        $path = $request->file('screenshot')->store('payment-proofs', 'public');
+        $payment->update(['transaction_reference' => $data['transaction_reference'], 'proof_path' => $path, 'status' => 'pending_verification', 'failure_reason' => null]);
+        return response()->json($payment->fresh()->load(['order', 'customer']), 202);
+    }
+
+    public function verifyProof(Request $request, Payment $payment)
+    {
+        abort_unless($request->user()->role === 'admin', 403);
+        $data = $request->validate(['status' => 'required|in:paid,failed']);
+        if ($data['status'] === 'paid') return $this->markPaid($payment, $payment->provider_transaction_id);
+        $payment->update(['status' => 'failed', 'failure_reason' => 'Payment proof was rejected.', 'verified_at' => now(), 'verified_by' => $request->user()->id]);
+        $payment->customer->notify(new PaymentStatusChanged($payment->fresh()));
+        return $payment->fresh();
+    }
 
     /** Creates a pending, server-priced payment. The client cannot set amount or paid status. */
     public function create(CreatePaymentRequest $request)
@@ -60,7 +80,7 @@ class PaymentController extends Controller
 
     private function markPaid(Payment $payment, ?string $providerTransactionId = null)
     {
-        return DB::transaction(function () use ($payment, $providerTransactionId) { $payment = Payment::lockForUpdate()->findOrFail($payment->id); if ($payment->status === 'paid') return $payment->fresh(); $payment->update(['status' => 'paid', 'paid_at' => now(), 'provider_transaction_id' => $providerTransactionId ?: $payment->provider_transaction_id, 'failure_reason' => null]); $payment->order->update(['payment_status' => 'paid']); $payment->customer->notify(new PaymentStatusChanged($payment)); return $payment->fresh(); });
+        return DB::transaction(function () use ($payment, $providerTransactionId) { $payment = Payment::lockForUpdate()->findOrFail($payment->id); if ($payment->status === 'paid') return $payment->fresh(); $payment->update(['status' => 'paid', 'paid_at' => now(), 'verified_at' => now(), 'provider_transaction_id' => $providerTransactionId ?: $payment->provider_transaction_id, 'failure_reason' => null]); $payment->order->update(['payment_status' => 'paid']); $payment->customer->notify(new PaymentStatusChanged($payment)); return $payment->fresh(); });
     }
 
     private function markResult(Payment $payment, array $result) { if (in_array($result['status'], ['failed', 'cancelled'], true)) $payment->update(['status' => $result['status'], 'failure_reason' => $result['failure_reason'] ?? null]); return $payment->fresh(); }

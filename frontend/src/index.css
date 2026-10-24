@@ -382,3 +382,10 @@ h1, h2, h3, h4, p { overflow-wrap: break-word; }
 .register-shell{width:min(100%,1120px);margin:28px auto 0}
 .register-panel{width:min(100%,480px);margin-left:0}
 @media(max-width:800px){.register-shell{width:100%;margin-top:25px}.register-panel{width:min(100%,466px);margin:0 auto}}
+ .admin-pagination { display:flex; justify-content:flex-end; align-items:center; gap:6px; padding:16px 4px 2px; }
+ .admin-pagination button { min-width:34px; padding:7px 10px; border:1px solid #dbe4ef; border-radius:7px; background:#fff; color:#334155; cursor:pointer; }
+ .admin-pagination button.active { border-color:#247ddd; background:#247ddd; color:#fff; }
+ .admin-pagination button:disabled { cursor:not-allowed; opacity:.45; }
+ .payment-instructions { display:grid; gap:10px; margin-top:18px; padding:18px; border:1px solid #bfdbfe; border-radius:12px; background:#eff6ff; }
+ .payment-instructions form { display:flex; flex-wrap:wrap; gap:8px; }
+ .payment-instructions input { flex:1 1 220px; min-width:0; padding:10px; border:1px solid #cbd5e1; border-radius:7px; }

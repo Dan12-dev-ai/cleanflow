@@ -10,7 +10,7 @@ class TelebirrPaymentService implements PaymentGateway
     public function create(Payment $payment): array
     {
         if (! config('services.telebirr.merchant_id') || ! config('services.telebirr.checkout_url')) {
-            throw new RuntimeException('Telebirr is not configured. Add authorized merchant credentials before accepting payments.');
+            return ['status' => 'awaiting_proof', 'instructions' => 'Send the exact amount to the Telebirr account, then upload your confirmation screenshot and transaction reference.', 'account_name' => config('services.telebirr.account_name', 'CleanFlow Laundry'), 'account_number' => config('services.telebirr.account_number', '0912345678'), 'provider' => 'Telebirr'];
         }
 
         // Implement the authorized merchant API request here. Never expose its keys to React.

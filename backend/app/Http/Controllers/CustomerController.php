@@ -13,7 +13,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return User::where('role','customer')->with('customerProfile')->withCount('orders')->paginate();
+        return User::where('role','customer')->with('customerProfile')->withCount('orders')->latest('created_at')->paginate(15);
     }
 
     /**
@@ -46,5 +46,14 @@ class CustomerController extends Controller
     public function destroy(User $customer)
     {
         abort_unless($customer->role==='customer',404);$customer->delete();return response()->noContent();
+    }
+
+    public function resetPassword(Request $request, User $customer)
+    {
+        abort_unless($customer->role === 'customer', 404);
+        $data = $request->validate(['password' => 'required|string|min:8|confirmed']);
+        $customer->update(['password' => $data['password']]);
+        $customer->tokens()->delete();
+        return response()->json(['message' => 'Customer password reset successfully.']);
     }
 }

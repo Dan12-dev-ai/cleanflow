@@ -23,6 +23,13 @@ export default function LoginPage() {
     return null
   }
 
+  const forgotPassword = async (event) => {
+    event.preventDefault()
+    const address = window.prompt('Enter your registered email address:')
+    if (!address) return
+    try { await api('/auth/forgot-password', { method: 'POST', body: JSON.stringify({ email: address.trim() }) }); showToast('If this email is registered, a password reset link has been sent.') } catch (error) { showToast(error.message, 'error') }
+  }
+
   const submit = async (event) => {
     event.preventDefault()
     if (!email || !password) {
@@ -49,7 +56,7 @@ export default function LoginPage() {
             <form onSubmit={submit}>
               <label>Email Address <span className="input-wrap"><FiMail /><input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" /></span></label>
               <label>Password <span className="input-wrap"><FiLock /><input value={password} onChange={(event) => setPassword(event.target.value)} type={showPassword ? 'text' : 'password'} autoComplete="current-password" placeholder="Enter your password" /><button type="button" className="password-toggle" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? 'Hide password' : 'Show password'}>{showPassword ? <FiEyeOff /> : <FiEye />}</button></span></label>
-              <div className="form-options"><label className="remember"><input type="checkbox" defaultChecked /> Remember me</label><a href="#forgot">Forgot password?</a></div>
+              <div className="form-options"><label className="remember"><input type="checkbox" defaultChecked /> Remember me</label><a href="#forgot" onClick={forgotPassword}>Forgot password?</a></div>
               <button className="login-submit">Log In <FiArrowRight /></button>
               <div className="login-divider"><span>or</span></div>
               <button type="button" className="login-google-button" onClick={() => showToast('Google sign-in needs OAuth configuration', 'error')}><b>G</b> Continue with Google</button>
