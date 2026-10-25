@@ -20,7 +20,7 @@ use App\Http\Controllers\FeedbackController;
 Route::get('/', fn () => response()->json([
     'name' => 'CleanFlow Laundry OS API',
     'status' => 'online',
-    'frontend' => 'http://127.0.0.1:5173',
+    'frontend' => env('FRONTEND_URL', 'http://127.0.0.1:5173'),
     'version' => '1.0.0',
 ]));
 
