@@ -11,10 +11,12 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-COPY composer.json composer.lock artisan ./
-RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --no-scripts
 
 COPY . .
+
+RUN composer dump-autoload --optimize --no-interaction
 
 RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
     && chmod -R ug+rwx storage bootstrap/cache
